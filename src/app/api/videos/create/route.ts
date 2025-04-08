@@ -17,17 +17,35 @@ export async function POST(req: NextRequest) {
 
     await connectToDatabase();
 
-    const { title, description, videoUrl, thumbnailUrl } = await req.json();
+    const {
+      title,
+      description,
+      videoUrl,
+      thumbnailUrl,
+      controls = true,
+      transformation,
+    } = await req.json();
     if (!title || !description || !videoUrl || !thumbnailUrl) {
       return NextResponse.json(
         { success: false, message: "Fill all the feilds" },
         { status: 400 }
       );
     }
-    await Video.create({title, description, videoUrl, thumbnailUrl});
+    await Video.create({
+      title,
+      description,
+      videoUrl,
+      thumbnailUrl,
+      controls,
+      transformation: {
+        height: 1920,
+        width: 1080,
+        quality: transformation?.quality ?? 100,
+      },
+    });
 
     return NextResponse.json(
-      { success: true, message: "Videos uploaded successfully" },
+      { success: true, message: "Video uploaded successfully" },
       { status: 200 }
     );
   } catch (error) {
