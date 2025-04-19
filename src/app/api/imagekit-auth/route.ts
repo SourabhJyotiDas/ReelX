@@ -1,5 +1,6 @@
+// app/api/imagekit-auth/route.ts
 import ImageKit from "imagekit";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const imagekit = new ImageKit({
   publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
@@ -9,15 +10,11 @@ const imagekit = new ImageKit({
 
 export async function GET() {
   try {
-    const authenticationParams = imagekit.getAuthenticationParameters();
-
-    return NextResponse.json(
-      { success: true, authenticationParams },
-      { status: 200 }
-    );
+    const authParams = imagekit.getAuthenticationParameters(); // { token, signature, expire }
+    return NextResponse.json(authParams); // ✅ should return all 3 keys
   } catch (error) {
     return NextResponse.json(
-      { message: "Image kit auth failed" },
+      { message: "ImageKit auth failed" },
       { status: 500 }
     );
   }

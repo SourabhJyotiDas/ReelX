@@ -1,97 +1,137 @@
 "use client";
-import RegisterSkeleton from "@/app/LoadingSkeletons/RegisterSkeleton";
+
+import { signIn, useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { toast } from "react-toastify";
+import Link from "next/link";
+import { FaGoogle } from "react-icons/fa";
+import Loading from "@/LoadingSkeletons/RegisterSkeleton";
 
-export default function Register() {
-  const data = useSession();
-  console.log(data);
+export default function RegisterPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "", 
-  });
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (session) router.replace("/");
+  }, [session]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { data } = await axios.post(
-        "/api/user/register",
-        {
-          email: form.email,
-          password: form.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      const createUser = async () => {
+        try {
+          setLoading(true);
+          await axios.post("/api/user/create", {
+            name: session.user.name,
+            email: session.user.email,
+            imageUrl: session.user.image || "",
+          });
+          setLoading(false);
+        } catch (error) {
+          toast.error("Error creating user.");
+          setLoading(false);
         }
-      );
+      };
+      createUser();
+    }
+  }, [status, session, router]);
 
-      console.log(data);
-    } catch (err) {
-      console.error("Registration failed", err);
+  const handleRegister = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/user/register", {
+        name,
+        email,
+        password,
+      });
+
+      toast.success(data.message);
+
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result?.error) {
+        toast.error("Invalid email or password");
+        setLoading(false);
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error("Failed to register. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  if (loading || status === "loading") return <Loading />;
+
   return (
-    <>
-      <div className="flex justify-center items-center h-[90vh]">
-        {loading ? (
-          <RegisterSkeleton />
-        ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded shadow-md w-80">
-            <h2 className="text-xl font-bold mb-4 text-center">Register</h2>
-            <input
-              name="email"
-              type="email"
-              placeholder="Email"
-              onChange={handleChange}
-              className="w-full p-2 mb-3 border rounded"
-              required
-            />
-            <input
-              name="password"
-              type="password"
-              placeholder="Password"
-              onChange={handleChange}
-              className="w-full p-2 mb-3 border rounded"
-              required
-            />
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded">
-              Register
-            </button>
-          </form>
-        )}
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+      <div className="w-full max-w-md space-y-6">
+        <h1 className="text-4xl font-bold text-center mb-4 tracking-tight">Join ReelX</h1>
+        <p className="text-center text-gray-400 text-sm">
+          Sign up to discover and share reels, connect with creators, and have fun!
+        </p>
+
+        <input
+          type="text"
+          placeholder="Full Name"
+          className="w-full p-3 rounded-md bg-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email Address"
+          className="w-full p-3 rounded-md bg-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-3 rounded-md bg-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          onClick={handleRegister}
+          className="w-full bg-pink-600 hover:bg-pink-700 transition-colors duration-300 text-white py-3 rounded-md font-semibold cursor-pointer">
+          Sign up
+        </button>
+
+        <div className="flex items-center gap-2">
+          <div className="flex-grow border-t border-gray-600" />
+          <span className="text-sm text-gray-400">or</span>
+          <div className="flex-grow border-t border-gray-600" />
+        </div>
+
+        <button
+          onClick={() => {
+            setLoading(true);
+            signIn("google");
+          }}
+          className="w-full bg-white text-black hover:bg-gray-200 transition-colors duration-300 py-3 rounded-md font-semibold flex items-center justify-center gap-3 cursor-pointer">
+          <FaGoogle /> Sign up with Google
+        </button>
+
+        <p className="text-center text-sm text-gray-400">
+          Already have an account?{" "}
+          <Link href="/user/signin" className="text-pink-500 font-semibold hover:underline">
+            Sign in here
+          </Link>
+        </p>
       </div>
-    </>
+    </div>
   );
 }

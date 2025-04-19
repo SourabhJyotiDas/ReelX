@@ -8,22 +8,21 @@ const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 
 export default function providers({ children }: { children: React.ReactNode }) {
   const authenticator = async () => {
-    try {
-      const response = await fetch("/api/imagekit-auth");
+    const res = await fetch("/api/imagekit-auth");
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Request failed with status ${response.status}: ${errorText}`
-        );
-      }
-
-      const data = await response.json();
-      const { signature, expire, token } = data;
-      return { signature, expire, token };
-    } catch (error) {
-      console.log(`Imagekit Authentication request failed: ${error}`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch ImageKit auth");
     }
+
+    const data = await res.json();
+
+    console.log("Frontend received:", data);
+
+    return {
+      token: data.token,
+      signature: data.signature,
+      expire: data.expire,
+    };
   };
 
   return (

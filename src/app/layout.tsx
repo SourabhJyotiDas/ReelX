@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Navbar from "@/components/Header"; // ✅ Import the Navbar
+import Providers from "@/components/providers";
 import "./globals.css";
-import Providers from "@/app/components/providers";
-import Navbar from "@/app/components/Header"; // ✅ Import the Navbar
+import { Poppins } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 
-export const metadata: Metadata = {
-  title: "My App",
-  description: "A cool Next.js app with login and register",
-};
+const Poppinss = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], // use bolds for headers, regular for body
+});
 
 export default function RootLayout({
   children,
@@ -16,9 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={Poppinss.className}>
         <Providers>
-          <Navbar /> {/* ✅ Add Navbar here */}
+        <ToastContainer />
+          <Navbar />
           <main>{children}</main>
         </Providers>
       </body>
