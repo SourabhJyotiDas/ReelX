@@ -15,11 +15,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="h-screen bg-gray-400 w-64 p-4">
-      {/* <div className="flex items-center space-x-4 mb-8">
-        <div className="text-2xl font-bold">ReelX</div>
-      </div> */}
-
+    <div className="hidden md:block h-screen sticky top-0 bg-blue-400 w-64 p-4 ">
       {/* Sidebar Navigation Links */}
       <div className="space-y-4">
         {navItems.map(({ name, icon, href }) => (

@@ -2,12 +2,14 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
   name: String,
+  username: { type: String },
+  bio: { type: String },
   email: { type: String, unique: true, required: true },
-  password: String,
   phone: String,
   image: String,
-  role: { type: String, enum: ["user", "premium-user"], default: "user" },
   gender: { type: String, enum: ["male", "female", "others"], default: "male" },
+  password: String,
+  role: { type: String, enum: ["user", "premium-user"], default: "user" },
   verify: { type: Boolean, default: false },
   verificationCode: Number
 }, { timestamps: true });

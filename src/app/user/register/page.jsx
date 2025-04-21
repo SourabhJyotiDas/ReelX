@@ -30,7 +30,7 @@ export default function RegisterPage() {
           await axios.post("/api/user/create", {
             name: session.user.name,
             email: session.user.email,
-            imageUrl: session.user.image || "",
+            image: session.user.image || "",
           });
           setLoading(false);
         } catch (error) {

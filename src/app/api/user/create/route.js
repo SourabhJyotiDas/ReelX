@@ -6,7 +6,7 @@ export async function POST(req) {
   await connectToDatabase();
 
   try {
-    const { name, email, imageUrl } = await req.json();
+    const { name, email, image } = await req.json();
 
     if (!name || !email) {
       return Response.json(
@@ -30,12 +30,7 @@ export async function POST(req) {
       );
     }
 
-    let avatarData = {
-      public_id: "GoogleId",
-      url: imageUrl,
-    }
-
-    user = await User.create({ name, email, avatar: avatarData })
+    user = await User.create({ name, email, image })
 
     return Response.json(
       {
