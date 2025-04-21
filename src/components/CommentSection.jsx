@@ -16,15 +16,16 @@ const CommentSection = ({ comments, setShowComments }) => {
         <h4 className="font-semibold text-base text-gray-800">All Comments</h4>
         <button
           onClick={() => setShowComments(false)}
-          className="text-gray-500 hover:text-gray-800 transition"
-        >
+          className="text-gray-500 hover:text-gray-800 transition">
           Close
         </button>
       </div>
 
       {/* Comments List */}
       {comments.length === 0 ? (
-        <p className="text-sm text-gray-500">No comments yet. Be the first one!</p>
+        <p className="text-sm text-gray-500">
+          No comments yet. Be the first one!
+        </p>
       ) : (
         <div className="space-y-4">
           {comments.map((c) => (
@@ -34,13 +35,12 @@ const CommentSection = ({ comments, setShowComments }) => {
                 <div className="flex justify-between items-center">
                   <div
                     onClick={() => handleNavigateToProfile(c.userId)}
-                    className="cursor-pointer text-sm font-semibold text-gray-800 hover:text-blue-500"
-                  >
-                    {c.user}
+                    className="cursor-pointer text-sm font-semibold text-gray-800 hover:text-blue-500">
+                    {c.user}{" "}
+                    <button className="ml-2 px-4 border rounded text-xs hover:bg-gray-100">
+                      Follow
+                    </button>
                   </div>
-                  <button className="text-xs text-blue-500 hover:text-blue-600">
-                    Follow
-                  </button>
                 </div>
                 <p className="text-sm text-gray-800 mt-1">{c.text}</p>
                 {/* Optional: Timestamp */}
