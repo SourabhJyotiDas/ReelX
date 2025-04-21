@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "@/models/User";
-import { connectToDatabase } from "@/lib/database";
+import { connectToDatabase } from "./database";
 import bcrypt from "bcryptjs";
 
 
@@ -21,6 +21,7 @@ export const authOptions = {
          },
 
          async authorize(credentials) {
+
             await connectToDatabase();
             try {
                let user = await User.findOne({ email: credentials.email });

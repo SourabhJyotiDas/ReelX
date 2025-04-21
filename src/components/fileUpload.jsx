@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 export default function FileUpload() {
-  const [url, setUrl] = useState<string | null>(null);
+  const [url, setUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState(null);
 
   return (
     <div>

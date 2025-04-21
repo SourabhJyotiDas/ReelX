@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/models/Video.js", "src/models/User.js", "src/LoadingSkeletons/RegisterSkeleton.jsx", "src/lib/options.js", "src/lib/database.js", "src/components/providers.jsx", "src/components/Header.jsx", "src/components/fileUpload.jsx", "src/app/page.jsx", "src/app/layout.jsx", "src/app/user/register/page.jsx", "src/app/user/login/page.jsx", "src/app/api/videos/route.js", "src/app/api/videos/create/route.js", "src/app/api/imagekit-auth/route.js", "src/app/api/auth/[...nextauth]/route.js"],
   "exclude": ["node_modules"]
 }

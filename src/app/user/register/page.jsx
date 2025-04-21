@@ -60,6 +60,7 @@ export default function RegisterPage() {
       });
 
       if (result?.error) {
+        console.log(result?.error)
         toast.error("Invalid email or password");
         setLoading(false);
       } else {
