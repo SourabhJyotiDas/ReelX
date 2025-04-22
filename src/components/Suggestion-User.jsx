@@ -11,31 +11,38 @@ const SuggestedAccounts = ({ suggestions = [] }) => {
       <ul className="space-y-4">
         {suggestions.map((user) => (
           <li key={user.id} className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image
-                src={user.image || "/default-avatar.png"}
-                alt={user.username}
-                width={40}
-                height={40}
-                className="rounded-full object-cover"
-              />
-              <div>
-                <p className="font-medium">{user.username}</p>
-                <p className="text-sm text-gray-500">{user.name}</p>
+            <Link href={`/profile/${user._id || user.id}`}>
+              <div className="flex items-center gap-3">
+                <Image
+                  src={user.image || "/default-avatar.png"}
+                  alt={user.username}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-medium">{user.username}</p>
+                  <p className="text-sm text-gray-500">{user.name}</p>
+                </div>
               </div>
-            </div>
-
-            <Link href={`/user/${user.username}`}>
-              <button className="text-sm text-blue-600 font-semibold hover:underline">
-                View
-              </button>
             </Link>
+
+            <button
+              className="ml-3 px-4 py-1 border rounded text-xs hover:bg-gray-100"
+              onClick={(e) => {
+                e.preventDefault();
+                // Add your follow logic here
+              }}>
+              Follow
+            </button>
           </li>
         ))}
       </ul>
 
       {suggestions.length === 0 && (
-        <p className="text-sm text-gray-500 text-center">No suggestions available.</p>
+        <p className="text-sm text-gray-500 text-center">
+          No suggestions available.
+        </p>
       )}
     </div>
   );

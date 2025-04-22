@@ -1,5 +1,6 @@
 "use client";
 import CommentSection from "@/components/CommentSection";
+import LikesSection from "@/components/LikeSection"; // Uncommented this
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,6 +12,12 @@ const FeedPost = ({ post }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(post.comments || []);
   const [showComments, setShowComments] = useState(false);
+  const [showLikes, setShowLikes] = useState(false);
+
+  // Calculate total likes count
+  const totalLikes = Array.isArray(post.likes)
+    ? post.likes.length + (liked ? 1 : 0)
+    : (post.likes || 0) + (liked ? 1 : 0);
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
@@ -34,13 +41,20 @@ const FeedPost = ({ post }) => {
           className="rounded-full"
           alt="avatar"
         />
-        <Link href={`/profile/${post.user._id}`}>
+        <Link href={`/profile/${post.user._id || post.user.id}`}>
           <div className="ml-3 cursor-pointer hover:underline">
             <p className="font-semibold">{post.user.name}</p>
             <p className="text-sm text-gray-500">@{post.user.username}</p>
           </div>
         </Link>
-        <div className="ml-auto text-xs text-gray-400">{"1 hours ago"}</div>
+        <button
+          className="ml-3 px-4 py-1 border rounded text-xs hover:bg-gray-100"
+          onClick={(e) => {
+            e.preventDefault();
+            // Add your follow logic here
+          }}>
+          Follow
+        </button>
       </div>
 
       {/* Title and Tags */}
@@ -72,7 +86,11 @@ const FeedPost = ({ post }) => {
       <div className="px-4 py-3">
         <div className="flex justify-between items-center mb-2">
           <div className="flex space-x-4">
-            <button onClick={() => setLiked(!liked)}>
+            <button
+              onClick={() => {
+                setLiked(!liked);
+                // Only show likes section when clicking the likes count, not the heart icon
+              }}>
               <FaHeart
                 className={`w-5 h-5 ${
                   liked ? "text-red-500" : "text-gray-500"
@@ -90,14 +108,33 @@ const FeedPost = ({ post }) => {
           </button>
         </div>
 
-        <p className="text-sm text-gray-700">
-          {liked ? post.likes + 1 : post.likes} likes • {comments.length}{" "}
-          comments
-        </p>
+        <div className="flex gap-2 text-sm text-gray-700">
+          <button
+            onClick={() => setShowLikes(true)}
+            className="hover:underline">
+            {totalLikes} likes
+          </button>
+          <span>•</span>
+          <button
+            onClick={() => setShowComments(true)}
+            className="hover:underline">
+            {comments.length} comments
+          </button>
+        </div>
       </div>
 
-      {/* Showing Comment */}
-      {showComments && <CommentSection comments={comments} setShowComments={setShowComments} />}
+      {/* Showing Comments */}
+      {showComments && (
+        <CommentSection comments={comments} setShowComments={setShowComments} />
+      )}
+
+      {/* Showing Likes */}
+      {showLikes && (
+        <LikesSection
+          likes={Array.isArray(post.likes) ? post.likes : []}
+          setShowLikes={setShowLikes}
+        />
+      )}
 
       {/* Comment Box */}
       <form
@@ -118,6 +155,9 @@ const FeedPost = ({ post }) => {
           </button>
         )}
       </form>
+      <div className="ml-auto text-xs text-gray-400 px-4 pb-3">
+        {"1 hours ago"}
+      </div>
     </div>
   );
 };
