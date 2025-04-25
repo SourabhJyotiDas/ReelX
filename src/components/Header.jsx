@@ -20,7 +20,7 @@ const Header = () => {
   console.log(status);
 
   return (
-    <header className="flex items-center justify-between px-4 md:px-6 py-2 md:py-3 shadow-md bg-white sticky top-0 z-50">
+    <header className="flex items-center justify-between px-4 md:px-28 py-2 md:py-3 shadow-md bg-white sticky top-0 z-50">
       {/* Logo */}
       <div className="text-lg md:text-2xl font-bold text-black">
         <Link href="/">ReelX</Link>

@@ -16,11 +16,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Providers>
         <ToastContainer />
-        <body className={`${Poppinss.className} flex`}>
-          <Sidebar />
-          <div className="w-full">
-            <Header />
-            <main>{children}</main>
+        <body className={`${Poppinss.className}`}>
+          <Header />
+          <div className="flex md:mx-24">
+            <Sidebar />
+            <div className="w-full">
+              <main>{children}</main>
+            </div>
           </div>
         </body>
       </Providers>

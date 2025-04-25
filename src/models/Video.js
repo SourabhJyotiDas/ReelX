@@ -3,11 +3,10 @@ import mongoose, { Schema, Model } from "mongoose";
 // Define Video Schema
 const VideoSchema = new Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    videoUrl: { type: String, required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     thumbnailUrl: { type: String },
-    controls: { type: Boolean, default: true },
+    caption: String,
+    videoUrl: String,
   },
   { timestamps: true }
 );

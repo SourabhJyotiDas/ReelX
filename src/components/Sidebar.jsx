@@ -15,7 +15,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="hidden md:block h-screen sticky top-0 bg-blue-400 w-64 p-4 ">
+    <div className="hidden md:block h-screen sticky top-12 bg-white w-[40vw] p-4 ">
       {/* Sidebar Navigation Links */}
       <div className="space-y-4">
         {navItems.map(({ name, icon, href }) => (

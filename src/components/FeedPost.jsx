@@ -70,14 +70,19 @@ const FeedPost = ({ post }) => {
       </div>
 
       {/* Media */}
-      <div className="w-full aspect-[9/16] bg-black relative">
+      <div className="w-full md:w-[70%] lg:w-[50%] h-[60vh] aspect-[9/16] bg-black relative max-w-sm md:max-w-md lg:max-w-lg mx-auto  overflow-hidden">
         {post.fileType.startsWith("image") ? (
-          <Image src={post.mediaUrl} alt="post" fill className="object-cover" />
+          <Image
+            src={post.mediaUrl}
+            alt="post"
+            fill
+            className="object-contain"
+          />
         ) : (
           <video
             src={post.mediaUrl}
             controls
-            className="object-cover w-full h-full"
+            className="object-contain w-full h-full"
           />
         )}
       </div>

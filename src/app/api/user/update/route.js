@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import {connectToDatabase} from "@/lib/database";
+import { connectToDatabase } from "@/lib/database";
 
 
 export async function POST(req) {
@@ -12,7 +12,7 @@ export async function POST(req) {
     const searchParams = new URLSearchParams(url.search);
     const userId = searchParams.get('userId');
 
-    const { name, phone, gender, imageUrl } = await req.json();
+    const { name, username, bio, phone, gender, imageUrl } = await req.json();
 
     if (!userId) {
       return Response.json(
@@ -38,7 +38,9 @@ export async function POST(req) {
 
     // Update user fields
     user.name = name || user.name;
+    user.username = username || user.username;
     user.phone = phone || user.phone;
+    user.bio = bio || user.bio;
     user.gender = gender || user.gender;
     user.image = imageUrl || user.image; // assuming 'url' means profile image
 
@@ -48,7 +50,6 @@ export async function POST(req) {
       {
         success: true,
         message: "Profile updated successfully.",
-        user,
       },
       { status: 200 }
     );
